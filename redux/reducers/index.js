@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 
-import { PREDICTIONS_AVAILABLE } from '../actions/';
+import { PREDICTIONS_AVAILABLE, START_LOADING } from '../actions/';
 
 let dataState = {
   predictions: [],
@@ -12,6 +12,9 @@ let dataState = {
 
 const dataReducer = (state = dataState, action) => {
   switch (action.type) {
+    case START_LOADING:
+      state = Object.assign({}, state, { loading: true });
+      return state;
     case PREDICTIONS_AVAILABLE:
       // store all incoming predictions data into state
       state = Object.assign({}, state, {

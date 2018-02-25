@@ -7,6 +7,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as Actions from '../redux/actions';
 
+import Predictions from '../components/Predictions';
+
 class Home extends Component {
   constructor(props) {
     super(props);
@@ -68,7 +70,7 @@ class Home extends Component {
           styleName="inline clear"
           style={{ container: { backgroundColor: '#cc0033' } }}
         />
-        <Text>{JSON.stringify(this.props.predictions)}</Text>
+        <Predictions />
         <StatusBar
           barStyle="default"
           hidden={false}

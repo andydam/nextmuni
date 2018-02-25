@@ -1,19 +1,15 @@
 import React, { Component } from 'react';
 import { StatusBar } from 'react-native';
 import { Font, AppLoading } from 'expo';
-import { Screen, NavigationBar, Text, Title, DropDownMenu } from '@shoutem/ui';
+import { Screen, NavigationBar, Text, Title } from '@shoutem/ui';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as Actions from '../redux/actions';
 
-import Times from '../components/Times';
-
 class Home extends Component {
   state = {
     fontsAreLoaded: false,
-    selectedRoute: '',
-    selectedStop: '',
   };
 
   async componentWillMount() {
@@ -35,17 +31,14 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    this.props.getRoutes();
-  }
-
-  getStops(route) {
-    this.setState({ selectedRoute: route });
-    this.props.getStops(route.tag);
-  }
-
-  getTimes(stop, route = this.state.selectedRoute) {
-    this.setState({ selectedStop: stop });
-    this.props.getTimes(route.tag, stop.stopId);
+    // get user's current location
+    navigator.geolocation.getCurrentPosition((position) =>
+      // call action to fetch predictions for bus stops near user's current location
+      this.props.getPredictions(
+        position.coords.latitude,
+        position.coords.longitude,
+      ),
+    );
   }
 
   render() {
@@ -59,34 +52,12 @@ class Home extends Component {
           centerComponent={<Title>nextmuni</Title>}
           styleName="inline"
         />
-        <DropDownMenu
-          styleName="horizontal"
-          options={this.props.routes}
-          selectedOption={
-            this.state.selectedRoute
-              ? this.state.selectedRoute
-              : this.props.routes[0]
-          }
-          onOptionSelected={(route) => this.getStops(route)}
-          titleProperty="title"
-          valueProperty="tag"
+        <Text>{JSON.stringify(this.props.predictions)}</Text>
+        <StatusBar
+          barStyle="default"
+          hidden={false}
+          networkActivityIndicatorVisible={this.props.loading}
         />
-        <DropDownMenu
-          styleName="horizontal"
-          options={this.props.stops}
-          selectedOption={
-            this.state.selectedStop
-              ? this.state.selectedStop
-              : this.props.stops[0]
-          }
-          onOptionSelected={(stop) =>
-            this.getTimes(stop, this.state.selectedRoute)
-          }
-          titleProperty="title"
-          valueProperty="stopId"
-        />
-        <Times times={this.props.times} />
-        <StatusBar barStyle="default" hidden={false} />
       </Screen>
     );
   }
@@ -95,9 +66,7 @@ class Home extends Component {
 const mapStateToProps = (state, props) => {
   return {
     loading: state.dataReducer.loading,
-    routes: state.dataReducer.routes,
-    stops: state.dataReducer.stops,
-    times: state.dataReducer.times,
+    predictions: state.dataReducer.predictions,
   };
 };
 

@@ -1,12 +1,3 @@
-import { ROUTES_AVAILABLE, getRoutes } from './getRoutes';
-import { STOPS_AVAILABLE, getStops } from './getStops';
-import { TIMES_AVAILABLE, getTimes } from './getTimes';
+import { PREDICTIONS_AVAILABLE, getPredictions } from './getPredictions';
 
-export {
-  ROUTES_AVAILABLE,
-  getRoutes,
-  STOPS_AVAILABLE,
-  getStops,
-  TIMES_AVAILABLE,
-  getTimes,
-};
+export { PREDICTIONS_AVAILABLE, getPredictions };

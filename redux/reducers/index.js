@@ -1,37 +1,27 @@
 import { combineReducers } from 'redux';
 
-import {
-  ROUTES_AVAILABLE,
-  STOPS_AVAILABLE,
-  TIMES_AVAILABLE,
-} from '../actions/';
+import { PREDICTIONS_AVAILABLE } from '../actions/';
 
 let dataState = {
-  routes: [],
-  stops: [],
-  times: { direction: { prediction: [] }, message: [] },
+  predictions: [],
+  pred_time_msg: '',
+  gps_accuracy_msg: '',
+  map_accuracy_msg: '',
   loading: true,
 };
 
 const dataReducer = (state = dataState, action) => {
   switch (action.type) {
-    case ROUTES_AVAILABLE:
+    case PREDICTIONS_AVAILABLE:
+      // store all incoming predictions data into state
       state = Object.assign({}, state, {
-        routes: action.routes,
+        predictions: action.predictions.preds,
+        pred_time_msg: action.predictions.pred_time_msg,
+        gps_accuracy_msg: action.predictions.gps_accuracy_msg,
+        map_accuracy_msg: action.predictions.map_accuracy_msg,
         loading: false,
       });
       return state;
-    case STOPS_AVAILABLE:
-      state = Object.assign({}, state, {
-        stops: action.stops,
-        loading: false,
-      });
-      return state;
-    case TIMES_AVAILABLE:
-      state = Object.assign({}, state, {
-        times: action.times,
-        loading: false,
-      });
     default:
       return state;
   }

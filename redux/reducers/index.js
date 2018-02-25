@@ -1,8 +1,17 @@
 import { combineReducers } from 'redux';
 
-import { ROUTES_AVAILABLE, STOPS_AVAILABLE } from '../actions/';
+import {
+  ROUTES_AVAILABLE,
+  STOPS_AVAILABLE,
+  TIMES_AVAILABLE,
+} from '../actions/';
 
-let dataState = { routes: [], stops: [], loading: true };
+let dataState = {
+  routes: [],
+  stops: [],
+  times: { direction: { prediction: [] }, message: [] },
+  loading: true,
+};
 
 const dataReducer = (state = dataState, action) => {
   switch (action.type) {
@@ -18,6 +27,11 @@ const dataReducer = (state = dataState, action) => {
         loading: false,
       });
       return state;
+    case TIMES_AVAILABLE:
+      state = Object.assign({}, state, {
+        times: action.times,
+        loading: false,
+      });
     default:
       return state;
   }

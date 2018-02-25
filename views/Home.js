@@ -7,7 +7,9 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as Actions from '../redux/actions';
 
-class Home extends React.Component {
+import Times from '../components/Times';
+
+class Home extends Component {
   state = {
     fontsAreLoaded: false,
     selectedRoute: '',
@@ -32,13 +34,18 @@ class Home extends React.Component {
     this.setState({ fontsAreLoaded: true });
   }
 
+  componentDidMount() {
+    this.props.getRoutes();
+  }
+
   getStops(route) {
     this.setState({ selectedRoute: route });
     this.props.getStops(route.tag);
   }
 
-  componentDidMount() {
-    this.props.getRoutes();
+  getTimes(stop, route = this.state.selectedRoute) {
+    this.setState({ selectedStop: stop });
+    this.props.getTimes(route.tag, stop.stopId);
   }
 
   render() {
@@ -72,10 +79,13 @@ class Home extends React.Component {
               ? this.state.selectedStop
               : this.props.stops[0]
           }
-          onOptionSelected={(route) => this.setState({ selectedStop: route })}
+          onOptionSelected={(stop) =>
+            this.getTimes(stop, this.state.selectedRoute)
+          }
           titleProperty="title"
           valueProperty="stopId"
         />
+        <Times times={this.props.times} />
         <StatusBar barStyle="default" hidden={false} />
       </Screen>
     );
@@ -87,6 +97,7 @@ const mapStateToProps = (state, props) => {
     loading: state.dataReducer.loading,
     routes: state.dataReducer.routes,
     stops: state.dataReducer.stops,
+    times: state.dataReducer.times,
   };
 };
 

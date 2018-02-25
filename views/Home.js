@@ -11,6 +11,7 @@ class Home extends React.Component {
   state = {
     fontsAreLoaded: false,
     selectedRoute: '',
+    selectedStop: '',
   };
 
   async componentWillMount() {
@@ -29,6 +30,11 @@ class Home extends React.Component {
     });
 
     this.setState({ fontsAreLoaded: true });
+  }
+
+  getStops(route) {
+    this.setState({ selectedRoute: route });
+    this.props.getStops(route.tag);
   }
 
   componentDidMount() {
@@ -54,9 +60,21 @@ class Home extends React.Component {
               ? this.state.selectedRoute
               : this.props.routes[0]
           }
-          onOptionSelected={(route) => this.setState({ selectedRoute: route })}
+          onOptionSelected={(route) => this.getStops(route)}
           titleProperty="title"
           valueProperty="tag"
+        />
+        <DropDownMenu
+          styleName="horizontal"
+          options={this.props.stops}
+          selectedOption={
+            this.state.selectedStop
+              ? this.state.selectedStop
+              : this.props.stops[0]
+          }
+          onOptionSelected={(route) => this.setState({ selectedStop: route })}
+          titleProperty="title"
+          valueProperty="stopId"
         />
         <StatusBar barStyle="default" hidden={false} />
       </Screen>
@@ -68,6 +86,7 @@ const mapStateToProps = (state, props) => {
   return {
     loading: state.dataReducer.loading,
     routes: state.dataReducer.routes,
+    stops: state.dataReducer.stops,
   };
 };
 

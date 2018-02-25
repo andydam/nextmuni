@@ -1,4 +1,4 @@
-export const ROUTES_AVAILABLE = 'DATA_AVAILABLE';
+export const ROUTES_AVAILABLE = 'ROUTES_AVAILABLE';
 
 export function getRoutes() {
   return async (dispatch) => {

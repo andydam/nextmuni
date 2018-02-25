@@ -1,5 +1,7 @@
 {
   "expo": {
+    "name": "nextmuni",
+    "icon": "./icon.png",
     "sdkVersion": "25.0.0"
   }
 }

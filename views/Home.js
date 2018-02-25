@@ -1,16 +1,22 @@
 import React, { Component } from 'react';
 import { StatusBar } from 'react-native';
 import { Font, AppLoading } from 'expo';
-import { Screen, NavigationBar, Text, Title } from '@shoutem/ui';
+import { Screen, NavigationBar, Text, Title, Button, Icon } from '@shoutem/ui';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as Actions from '../redux/actions';
 
 class Home extends Component {
-  state = {
-    fontsAreLoaded: false,
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      fontsAreLoaded: false,
+    };
+
+    this.fetchPredictions = this.fetchPredictions.bind(this);
+  }
 
   async componentWillMount() {
     await Font.loadAsync({
@@ -31,6 +37,10 @@ class Home extends Component {
   }
 
   componentDidMount() {
+    this.fetchPredictions();
+  }
+
+  fetchPredictions() {
     // get user's current location
     navigator.geolocation.getCurrentPosition((position) =>
       // call action to fetch predictions for bus stops near user's current location
@@ -49,8 +59,14 @@ class Home extends Component {
     return (
       <Screen>
         <NavigationBar
-          centerComponent={<Title>nextmuni</Title>}
-          styleName="inline"
+          centerComponent={<Title>NEXTMUNI</Title>}
+          rightComponent={
+            <Button styleName="dark" onPress={this.fetchPredictions}>
+              <Icon name="refresh" />
+            </Button>
+          }
+          styleName="inline clear"
+          style={{ container: { backgroundColor: '#cc0033' } }}
         />
         <Text>{JSON.stringify(this.props.predictions)}</Text>
         <StatusBar

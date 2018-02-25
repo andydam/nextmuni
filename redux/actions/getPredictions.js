@@ -6,10 +6,8 @@ export function getPredictions(lat, long) {
     dispatch({ type: START_LOADING });
 
     try {
-      // build project
-      // const body = `preds=byLoc&maxDis=2300&accuracy=2400&lat=${lat}&long=${long}`;
-      const body =
-        'preds=byLoc&maxDis=2300&accuracy=2400&lat=37.733629&lon=-122.398864';
+      // build param string
+      const body = `preds=byLoc&maxDis=2300&accuracy=2400&lat=${lat}&long=${long}`;
       // make POST request to nextbus mobile site
       const predictions = await fetch('http://www.nextbus.com/service/mobile', {
         method: 'POST',
